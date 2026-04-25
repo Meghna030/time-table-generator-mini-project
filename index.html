@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SyncroGrid | Automatic Timetable Generator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Poppins';background:#f0f2f5;color:#333;}
+
+/* NAV */
+nav{
+    background:#fff;
+    padding:15px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.logo{font-size:1.5rem;font-weight:700;color:#3498db;text-decoration:none;}
+.nav-links a{margin-left:20px;text-decoration:none;color:#333;font-weight:600;}
+.nav-links a:hover{color:#3498db;}
+
+section{padding:60px 20px;}
+.hidden{display:none;}
+
+.card{
+    background:white;
+    padding:40px;
+    max-width:1000px;
+    margin:auto;
+    border-radius:12px;
+}
+
+/* HERO */
+.hero{
+    height:400px;
+    background:linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),
+    url('https://images.unsplash.com/photo-1506784983877-45594efa4cbe');
+    background-size:cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:2rem;
+}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th,td{padding:12px;border:1px solid #ddd;text-align:center;}
+th{background:#3498db;color:white;}
+
+.editable{background:#fff7e6;}
+
+.course-box{
+    display:inline-block;
+    padding:10px 20px;
+    margin:10px;
+    background:#3498db;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.chapter-box{
+    background:#ecf0f1;
+    margin:5px;
+    padding:8px;
+    border-radius:6px;
+}
+
+footer{
+    background:#2c3e50;
+    color:white;
+    text-align:center;
+    padding:30px;
+    margin-top:40px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<a class="logo">SyncroGrid</a>
+<div class="nav-links">
+<a href="#home">Home</a>
+<a href="#about">About</a>
+<a href="#courses">Courses</a>
+<a href="#timetable">Timetable</a>
+<a href="#contact">Contact</a>
+</div>
+</nav>
+
+<!-- LOGIN -->
+<section id="login">
+<div class="card" style="max-width:400px;text-align:center;">
+<h2>Admin Login</h2>
+<input id="username" placeholder="Username"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
+<button onclick="login()">Login</button>
+<p id="loginError" style="color:red;"></p>
+</div>
+</section>
+
+<!-- HOME -->
+<section id="home" class="hidden">
+<div class="hero">
+<h1>SyncroGrid</h1>
+</div>
+<div class="card">
+<h2 style="text-align:center;">Precision Planning Made Simple</h2>
+<p style="text-align:center;">SyncroGrid helps you manage your academic timetable efficiently.</p>
+</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="hidden">
+<div class="card">
+<h2>About</h2>
+<p>A modern timetable editor and planner designed for students.</p>
+</div>
+</section>
+
+<!-- COURSES -->
+<section id="courses" class="hidden">
+<div class="card" style="text-align:center;">
+<h2>My Courses</h2>
+<div id="courseList"></div>
+
+<h3>Chapters</h3>
+<div id="chapterList"></div>
+</div>
+</section>
+
+<!-- TIMETABLE -->
+<section id="timetable" class="hidden">
+<div class="card">
+<h2>Weekly Timetable</h2>
+<button id="editBtn">Edit</button>
+
+<table id="timetableTable">
+<tr>
+<th>Day</th>
+<th>09-10</th>
+<th>10-11</th>
+<th>11-12</th>
+<th>12-01</th>
+<th>01-02</th>
+<th>02-03</th>
+</tr>
+
+<tr>
+<th>Monday</th>
+<td>Math</td>
+<td>Physics</td>
+<td>Chemistry</td>
+<td style="background:#eee;">BREAK</td>
+<td>English</td>
+<td>Biology</td>
+</tr>
+
+<tr>
+<th>Tuesday</th>
+<td>Biology</td>
+<td>Math</td>
+<td>Physics</td>
+<td style="background:#eee;">BREAK</td>
+<td>Chemistry</td>
+<td>English</td>
+</tr>
+
+<tr>
+<th>Wednesday</th>
+<td>English</td>
+<td>Chemistry</td>
+<td>Math</td>
+<td style="background:#eee;">BREAK</td>
+<td>Physics</td>
+<td>Biology</td>
+</tr>
+
+<tr>
+<th>Thursday</th>
+<td>Physics</td>
+<td>Biology</td>
+<td>English</td>
+<td style="background:#eee;">BREAK</td>
+<td>Math</td>
+<td>Chemistry</td>
+</tr>
+
+<tr>
+<th>Friday</th>
+<td>Chemistry</td>
+<td>English</td>
+<td>Biology</td>
+<td style="background:#eee;">BREAK</td>
+<td>Physics</td>
+<td>Math</td>
+</tr>
+
+</table>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="hidden">
+<div class="card" style="text-align:center;">
+<h2>Contact</h2>
+<p><strong>Developer:</strong> Meghna Rasheed</p>
+<p>Email: support@syncrogrid.com</p>
+</div>
+</section>
+
+<footer class="hidden">
+<p>©️ 2026 SyncroGrid</p>
+</footer>
+
+<script>
+const ADMIN_USER="admin";
+const ADMIN_PASS="123456789";
+
+/* SUBJECT CHAPTERS */
+const subjectChapters={
+Math:["Algebra","Trigonometry","Calculus","Geometry","Statistics"],
+Physics:["Mechanics","Thermodynamics","Optics","Waves","Electricity"],
+Chemistry:["Atoms","Reactions","Organic","Periodic Table","Bonding"],
+English:["Grammar","Poetry","Prose","Writing","Comprehension"],
+Biology:["Cells","Genetics","Ecology","Evolution","Human Body"]
+};
+
+function login(){
+if(username.value===ADMIN_USER && password.value===ADMIN_PASS){
+document.getElementById("login").style.display="none";
+document.querySelectorAll(".hidden").forEach(s=>s.classList.remove("hidden"));
+loadCourses();
+}else{
+loginError.innerText="Invalid login";
+}
+}
+
+/* LOAD COURSES */
+function loadCourses(){
+const set=new Set();
+document.querySelectorAll("#timetableTable td").forEach(td=>{
+if(td.innerText!=="BREAK") set.add(td.innerText);
+});
+
+courseList.innerHTML="";
+set.forEach(sub=>{
+const div=document.createElement("div");
+div.className="course-box";
+div.innerText=sub;
+div.onclick=()=>showChapters(sub);
+courseList.appendChild(div);
+});
+}
+
+/* SHOW CHAPTERS */
+function showChapters(subject){
+chapterList.innerHTML="";
+subjectChapters[subject].forEach(ch=>{
+chapterList.innerHTML+=`<div class="chapter-box">${ch}</div>`;
+});
+}
+
+/* EDIT MODE */
+let editing=false;
+editBtn.onclick=()=>{
+editing=!editing;
+document.querySelectorAll("#timetableTable td").forEach(td=>{
+if(td.innerText!=="BREAK"){
+td.contentEditable=editing;
+td.classList.toggle("editable",editing);
+}
+});
+if(!editing) loadCourses();
+};
+</script>
+
+</body>
+</html>
